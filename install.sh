@@ -1,4 +1,4 @@
-local environmentFile="/etc/profile.d/custom.g.sh"
+environmentFile="/etc/profile.d/custom.g.sh"
 
 beep
 
