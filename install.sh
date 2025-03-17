@@ -1,9 +1,9 @@
-environmentFile="/etc/profile.d/custom.g.sh"
+environmentFile="/etc/profile.d/environment.g.sh"
 
 beep
 
 # Remove custom profile config if it exists
-rm /etc/profile.d/environment.g.sh
+rm $environmentFile
 echo "# Generated via https://github.com/rettoph/homelab/blob/main/install.sh on $(date +%Y%m%d)" >> $environmentFile
 echo "# DO NOT EDIT DIRECTLY. This file will be overwritten next time the installer is ran." >> $environmentFile
 echo "" >> $environmentFile
