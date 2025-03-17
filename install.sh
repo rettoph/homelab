@@ -1,5 +1,5 @@
 environmentFile="/etc/profile.d/environment.g.sh"
-sshKeyPath="~/.ssh/id_ed25519"
+sshKeyPath=~/.ssh/id_ed25519
 sshKeyPhrase=""
 
 beep
@@ -25,7 +25,8 @@ beep
 
 # Generate ssh keys
 echo "Generating SSH Key..."
-ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)" -f $sshKeyPath -N $sshKeyPhrase
+ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)" -f $sshKeyPath -N "$sshKeyPhrase"
 
 # Copy new key to authorized_keys file
-cat "$sshKeyPath.pub >> ~/.ssh/authorized_keys
+echo "Adding SSH key to authorized_keys..."
+cat $sshKeyPath.pub >> ~/.ssh/authorized_keys
