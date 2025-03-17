@@ -18,7 +18,7 @@ apk upgrade
 echo "Installing nano..."
 apk add nano
 echo "# Set nano as default text editor" >> $environmentFile
-echo "export EDITOR=" "/usr/bin/nano" >> $environmentFile
+echo "export EDITOR=/usr/bin/nano" >> $environmentFile
 echo "" >> $environmentFile
 
 beep
@@ -30,3 +30,6 @@ ssh-keygen -t ed25519 -C "$(whoami)@$(hostname)" -f $sshKeyPath -N "$sshKeyPhras
 # Copy new key to authorized_keys file
 echo "Adding SSH key to authorized_keys..."
 cat $sshKeyPath.pub >> ~/.ssh/authorized_keys
+
+# Add beep on reboot
+echo "@reboot beep" | crontab -
