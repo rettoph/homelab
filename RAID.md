@@ -2,7 +2,7 @@
 Create a brand new RAID device
 
 ## Prerequisites
-- [Setup](/SETUP.md)
+- [SSH](/SSH.md)
 
 ## Steps
 1. Update and run the following
@@ -36,7 +36,12 @@ Create a brand new RAID device
 2. **IMPORTANT** - Wait for the rebuild to complete before processing. This is a multi hour process.
     - Check progress with `mdadm --detail /dev/md0`
 
+3. Reboot then verify RAID setup
+    - `mdadm -v --detail --scan`
+
 # Expanding an existing RAID Device
+Add drives to an existing RAID device
+
 ## Prerequisites
 - [Creating a RAID Device](#creating-a-raid-device)
 

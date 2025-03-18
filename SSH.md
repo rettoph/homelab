@@ -2,7 +2,7 @@
 Generate a new SSH Key on the system and walk through on how to require SSH login.
 
 ## Prerequisites
-- [Setup](/SETUP.md)
+- [Setup](/Setup.md)
 
 ## Steps
 1. On the Server run:
@@ -47,3 +47,5 @@ Generate a new SSH Key on the system and walk through on how to require SSH logi
 6. Reboot server
 
 7. Wait for `beep` then log back on via `ssh soraka`
+
+8. Recommended Next Steps: [RAID](/RAID.md)

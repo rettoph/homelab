@@ -20,3 +20,6 @@ Note: Several blocks in this guide are wrapped with brackets `{}`. This is by de
     ```
 
 2. Edit `/etc/apk/repositories` and uncomment community packages
+
+3. Recommended Next Steps: [SSH](/SSH.md)
+
