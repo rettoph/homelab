@@ -19,7 +19,7 @@ Create a brand new RAID device
     # Format the RAID array (xfs better for bigger files)
     mkfs.xfs -f /dev/md0
 
-    # Mount to /mnt/raid
+    # Mount to /raid
     mkdir -p /raid
     mount /dev/md0 /raid
 
@@ -38,6 +38,86 @@ Create a brand new RAID device
 
 3. Reboot then verify RAID setup
     - `mdadm -v --detail --scan`
+
+4. Make the RAID mount point a valid shared network folder
+    - `apk add samba`
+
+5. Edit `/etc/samba/smb.conf`
+    - Find `[global]` and update
+        - Update `workgroup` (default for my windows machine seems to be `WORKGROUP`)
+        - Add 
+            ```
+            logon home = /raid/users/%U
+            security = user
+            guest ok = no
+            null passwords = no
+            ```
+
+    - Find `[homes]` and update
+        - Add
+            ```
+            path = /raid/users/%U
+            ```
+
+    - Add a new share to the end of the file:
+        ```
+        [media]
+           path = /raid/media
+           valid users = @mediagroup
+           read only = no
+           guest ok = no
+           force group = mediagroup
+           create mask = 0770
+           directory mask = 0770
+           security = user
+        ```
+
+6. Start and enable samba by default
+    ```sh
+    {
+        # Create media folder and set perms
+        mkdir /raid/media
+        addgroup mediagroup
+        chown :mediagroup /raid/media
+        chmod 770 /raid/media
+
+        rc-service samba start
+        rc-update add samba default
+    }
+    ```
+
+7. Add a new user
+    ```sh
+    {
+        echo "Enter new user's name:"
+        read name
+
+        # Create user
+        adduser $name
+        smbpasswd -a $name
+
+        # Create folder and set permissions
+        mkdir /raid/users/$name
+        chown -R $name:$name /raid/users/$name
+        adduser $name mediagroup
+    }
+    ```
+
+8. Update user password
+    ```sh
+    {
+        echo "Enter user's name:"
+        read name
+
+        passwd $name
+        smbpasswd -x $name
+        smbpasswd -a $name
+
+        rc-service samba restart
+    }
+    ```
+    - If updating the password does not work, try running `net use * /delete` on windows to clear your credentials.
+    - If windows still wont connect try looking for a samba entry in credential manager and delete it
 
 # Expanding an existing RAID Device
 Add drives to an existing RAID device
