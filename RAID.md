@@ -1,5 +1,9 @@
 # Creating a RAID Device
-Create a brand new RAID device
+Create a brand new RAID device.
+
+Here are some optional steps that might speed things up idk
+
+https://baptiste-wicht.com/posts/2015/03/how-to-speed-up-raid-5-6-growing-with-mdadm.html
 
 ## Prerequisites
 - [SSH](/SSH.md)
@@ -14,13 +18,15 @@ Create a brand new RAID device
     # This is hard coded for my current computer hardware. If the 
     # drives are changed or moved remember to update the devices
     # list drives with `lsblk`
-    mdadm --create --verbose /dev/md0 --level=5 --raid-devices=2 /dev/sda /dev/sdc
+    mdadm --create --verbose /dev/md0 --level=5 --raid-devices=2 /dev/sda /dev/sdc /dev/sdh
 
     # Format the RAID array (xfs better for bigger files)
     mkfs.xfs -f /dev/md0
 
     # Mount to /raid
     mkdir -p /raid
+    chown nobody:nogroup /raid
+    chmod 775 /raid
     mount /dev/md0 /raid
 
     # Make RAID Persistend
@@ -28,16 +34,41 @@ Create a brand new RAID device
     echo "/dev/md0 /raid xfs defaults,nofail 0 2" | tee -a /etc/fstab
 
     # Ensure RAID is assembled on start
-    echo "mdadm --assemble --scan" | tee -a /etc/local.d/mdadm.start
-    chmod +x /etc/local.d/mdadm.start
-    rc-update add local default
+    rc-update add mdadm boot
+    rc-update add mdadm-raid boot
     ```
 
 2. **IMPORTANT** - Wait for the rebuild to complete before processing. This is a multi hour process.
     - Check progress with `mdadm --detail /dev/md0`
+    - Watch progress with `watch cat /proc/mdstat`
 
 3. Reboot then verify RAID setup
     - `mdadm -v --detail --scan`
+
+4. At this point the mount fight fail. On boot you might see an error indicating `/dev/md0` not found. This is because `localmount` runs before `mdadm` on boot and i've not found a good way to change that. Here is my best solution...
+    - Replace `/etc/init.d/mdadm` with
+        ```sh
+        #!/sbin/openrc-run
+
+        NAME=mdadm
+        DAEMON=/sbin/$NAME
+
+        depend() {
+                before localmount
+        }
+
+        start() {
+                ebegin "Starting ${NAME}"
+                        start-stop-daemon --start --quiet --background \
+                                --exec ${DAEMON} -- \
+                                --monitor --scan \
+                                --daemonise ${OPTS}
+                eend $?
+        }
+        ```
+    - This adds localmount to the before script, ensuring raid is assembled before mounting.
+    - This removes net and dns requirnments from mdadm. I dont use networking so i think thats okay.
+    - So far, no issues and `/raid` is succesfully mounted on boot
 
 4. Make the RAID mount point a valid shared network folder
     - `apk add samba`

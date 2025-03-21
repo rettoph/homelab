@@ -1,11 +1,10 @@
-# Create Backup
-Guide to restoring system from backup. Mostly stolen from https://askubuntu.com/questions/7809/how-to-back-up-my-entire-system
-
-Note: This method will only backup files on `/` and excludes RAID, mounts, and more.
+# Automatic Ripping Machine
+Guid to setting up Automatic Ripping machine for DVD ripping and such
 
 ## Prerequisites
 - [Setup](/Setup.md)
-- [RAID](/RAID.md) - This backup assumes `/raid` exists. (And ignores it)
+- [RAID](/RAID.md)
+- [Docker](/Docker.md)
 
 ## Steps
 1. Install & Configure backup storage device
