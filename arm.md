@@ -57,3 +57,18 @@ THIS IS NOT A COMPLETED GUIDE FOLLOW AT YOUR OWN RISK
 
     makemkvcon -r info disc:9999
     makemkvcon reg M-9@CnzqkHeuO8cxJu12mXCe9UfpASWUhvE_zfZZf3JyyQNmpi5G4LoWSGEtGjouJis1
+
+docker run -d \
+   -p "8080:8080" \
+   -e ARM_UID="1001" \
+   -e ARM_GID="1001" \
+   -v "/home/arm:/home/arm" \
+   -v "/home/arm/Music:/home/arm/Music" \
+   -v "/home/arm/logs:/home/arm/logs" \
+   -v "/home/arm/media:/home/arm/media" \
+   -v "/etc/arm/config:/etc/arm/config" \
+   --device="/dev/sr0:/dev/sr0" \
+   --privileged \
+   --restart "always" \
+   --name "automatic-ripping-machine" \
+   "automatic-ripping-machine"

@@ -6,19 +6,14 @@ Note: Several blocks in this guide are wrapped with brackets `{}`. This is by de
 ## Steps
 1. Upgrade packages and add reboot `beep`:
     ```sh
-    {
-        # Update and upgrade packages
-        # If you forget to grant internet access to your server before running this try clearing apt cache via
-        # sudo rm /var/lib/apt/lists/*_*
-        apt update && apt upgrade
+    # Update and upgrade packages
+    # If you forget to grant internet access to your server before running this try clearing apt cache via
+    # sudo rm /var/lib/apt/lists/*_*
+    apt update && apt upgrade
 
-        # Add beep on reboot
-        echo "@reboot beep" | crontab -
-
-        # Install nano and set as default editor
-        echo "export EDITOR=/usr/bin/nano" >> "/etc/profile.d/environment.g.sh"
-    }
+    # Add beep on reboot
+    echo "@reboot beep" | crontab -
     ```
 
-2. Recommended Next Steps: [SSH](/SSH.md)
+2. Recommended Next Steps: [SSH](./SSH.md)
 
