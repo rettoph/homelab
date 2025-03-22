@@ -5,7 +5,13 @@ Generate a new SSH Key on the system and walk through on how to require SSH logi
 - [Setup](/Setup.md)
 
 ## Steps
-1. On the Server run:
+1. The default server setup has a few settings that disable password authentication. With the physical device edit `/etc/ssh/sshd_config`
+    - `PasswordAuthentication yes`
+    - `PubkeyAuthentication no`
+    - `PermitRootLogin yes` - Only if you want to use root
+    - `# UsePAM yes`
+
+2. SSH into the server with your local device and run
     ```sh
     {
         # Read SSH Key inputs
@@ -30,9 +36,11 @@ Generate a new SSH Key on the system and walk through on how to require SSH logi
         echo "SSH Key has been generated. Copy '$ssh_key_file' to your local machine."
     }
     ```
-2. Copy your SSH Key from the server to your local machine
 
-3. Edit `~/.ssh/config` on the client and add config
+3. Copy your SSH Key from the server to your local machine. If you are copy/pasting the key content manually make sure you have a new line at the end.
+    - Forgetting the new line may cause a `invalid format` when you attempt to connect
+
+4. Edit `~/.ssh/config` on the client and add config
     ```markup
     Host soraka
         HostName soraka.retto.ph
@@ -40,12 +48,11 @@ Generate a new SSH Key on the system and walk through on how to require SSH logi
         IdentityFile ~/.ssh/id_ed25519
     ```
 
-4. Edit `/etc/ssh/sshd_config` on the server
+5. Edit `/etc/ssh/sshd_config` on the server
     - `PasswordAuthentication no`
     - `PubkeyAuthentication yes`
 
-6. Reboot server
+6. Reboot ssh service
+    - `systemctl restart ssh.service`
 
-7. Wait for `beep` then log back on via `ssh soraka`
-
-8. Recommended Next Steps: [RAID](/RAID.md)
+8. Recommended Next Steps: [RAID](./RAID.md)

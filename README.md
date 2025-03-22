@@ -1,11 +1,4 @@
-# Homelab setup
-A collection of scripts intended for my personal use. All scripts are meant to be ran on an Alpine server.
+## Debian Setup Guid
+I gave up on Alpine - too many projects depend on packages unique to apk and finding alternatives with apk was getting to be a real pain.
 
-***Update: I give up with Alpine. Not enough apps support it and its too difficult to work around. Switching to Debian
-
-## Contents
-- [Setup](/Setup.md) - Start here.
-- [SSH](/SSH.md) - Generate new SSH keys and require them for login.
-- [RAID](/RAID.md) - Configure a RAID device.
-- [Backups](/Backup.md) - Create and restore system backups
-- [Docker](/Docker.md) - Install and configure docker services
+*Note To Self*: When using the cli Debian installer it will eventually ask what to install. "Desktop Environment, GNOME, ect". DO NOT HIT ENTER EXPECTING THAT TO UNCHECK DESKTOP ENVIRONMENT. This will auto continue to the next page and begin installation. Use Spacebar to deselect instead.
