@@ -18,7 +18,8 @@ https://baptiste-wicht.com/posts/2015/03/how-to-speed-up-raid-5-6-growing-with-m
     # This is hard coded for my current computer hardware. If the 
     # drives are changed or moved remember to update the devices
     # list drives with `lsblk`
-    mdadm --create --verbose /dev/md0 --level=5 --raid-devices=3 /dev/sda /dev/sdb /dev/sdd
+    # https://serverfault.com/questions/930933/poor-write-performance-of-software-raid10-array-of-8-ssd-drives
+    mdadm --create /dev/md0 --name=ryze --level=10 --raid-devices=4 --chunk=64 /dev/sdg /dev/sdh /dev/sdi /dev/sdj
     ```
 2. **IMPORTANT** - Wait for the rebuild to complete before processing. This is a multi hour process.
     - Check progress with `mdadm --detail /dev/md0`
